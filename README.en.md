@@ -1,5 +1,7 @@
 # FlyerSummon
 
+**English** | [简体中文](README.md)
+
 A **Hollow Knight: Silksong** BepInEx mod that turns the Deep Docks enemy
 **Flintflame Flyer** (internal name `Dock Bomber`) into something you can summon on demand — as a
 normal **enemy** or as a **friendly companion** — and that can also replace the **Cogwork Flier**

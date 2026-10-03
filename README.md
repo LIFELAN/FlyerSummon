@@ -1,5 +1,7 @@
 # FlyerSummon 使用说明（燧焰飞工召唤）
 
+[English](README.en.md) | **简体中文**
+
 一个《空洞骑士：丝之歌》BepInEx 模组：按下热键（默认 **F8**），即可**在任意区域**
 于大黄蜂身边召唤一只功能完整的 **燧焰飞工（Flintflame Flyer，游戏内部物体名 `Dock Bomber`）**。
 
