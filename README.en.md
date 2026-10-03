@@ -91,17 +91,7 @@ Hot-reloadable (applies within ~1 second, no restart). Existing summoned allies 
 | `Hotkey` | `F8` | Hostile Flyer summon key |
 | `FriendlyHotkey` | `F9` | Friendly Flyer summon key |
 | `ClearAlliesHotkey` | `F10` | Clear-allies key |
-| `SceneAddress` | `Scenes/Dock_02` | Deep Docks scene used as the prefab library |
-| `EnemyObjectName` | `Dock Bomber` | Enemy GameObject cloned from the library |
 | `DebugLogging` | `false` | Extra logging |
-
-### Summon (spawn position)
-
-| Key | Default | Meaning |
-| --- | --- | --- |
-| `SpawnOffsetX` | `3` | Horizontal spawn offset from Hornet |
-| `SpawnOffsetY` | `1.5` | Vertical spawn offset from Hornet |
-| `SpawnRadius` | `3` | Random jitter around the spawn point (avoids stacking); `0` disables |
 
 ### Ally (companion behaviour)
 
@@ -109,11 +99,6 @@ Hot-reloadable (applies within ~1 second, no restart). Existing summoned allies 
 | --- | --- | --- | --- |
 | `AllyInvincible` | `true` | bool | Ally is immune to all damage from Hornet |
 | `MaxCount` | `3` | 1–20 | Max simultaneous allies; extra summons replace the oldest |
-| `EnemySearchRadius` | `25` | 5–80 | Target search radius (anchored at Hornet) |
-| `FollowDistance` | `12` | 2–40 | Distance at which the ally returns to Hornet |
-| `WarpDistance` | `50` | 15–200 | Hard teleport-back distance (also after scene changes) |
-| `OrbitRadius` | `3.5` | 0–12 | Radius of the random spot each ally attacks from; `0` disables |
-| `AimSpread` | `1` | 0–10 | Random spread of the bomb landing point; `0` = exact centre |
 | `BombDamage` | `15` | 0–1000 | Bomb explosion damage (vanilla is 300) |
 | `BombEffectScale` | `1` | 0–1 | Explosion visual size (damage area unchanged; `0` = invisible) |
 | `BombVolume` | `0.1` | 0–1 | Bomb volume multiplier (`0` = muted) |
@@ -123,6 +108,11 @@ Hot-reloadable (applies within ~1 second, no restart). Existing summoned allies 
 | `BodyScale` | `1` | 0.2–2 | Ally visual scale (also scales its hitbox and ranges) |
 | `AutoDespawnAfterThrows` | `false` | bool | Disappear after a number of throws |
 | `AutoDespawnThrowCount` | `5` | 1–100 | Number of throws before disappearing |
+
+> Hardcoded (not configurable): scene address (`Scenes/Dock_02`), enemy object name (`Dock Bomber`),
+> spawn offset/radius (`3` / `1.5` / `3`), search radius (`25`), follow distance (`12`), warp distance
+> (`25`), aim spread (`1`), orbit radius (`6`); plus the bomb's flame density (`0.2`), smoke density
+> (`0.01`), full-screen flash, camera shake and large particles.
 
 ### Tool
 
@@ -170,10 +160,10 @@ throw/icon are swapped, throw audio is silenced, …). They only affect the frie
 
 **A brief hitch on the first summon?** Normal — the Deep Docks scene is loaded and unloaded once.
 
-**The ally just sits there?** Make sure an enemy is nearby (`EnemySearchRadius`). If it still does
-nothing, enable `DebugLogging` and share the log.
+**The ally just sits there?** Make sure an enemy is nearby. If it still does nothing, enable
+`DebugLogging` and share the log.
 
-**It takes too long to come back?** Lower `FollowDistance` and `WarpDistance`.
+**It takes too long to come back?** The follow/warp distances are tuned and fixed.
 
 **Past the count limit?** The newest still appears and the oldest is removed; press **F10** to clear
 everything.

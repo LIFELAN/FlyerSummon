@@ -192,7 +192,7 @@ internal sealed class AllyFlyer : MonoBehaviour
             : 0f;
 
         // Hard fallback: after a scene transition (or if the ally falls far behind) snap it back.
-        if (hero != null && hero.isHeroInPosition && heroDistance > FlyerSummonPlugin.WarpDistance.Value)
+        if (hero != null && hero.isHeroInPosition && heroDistance > FlyerSummonPlugin.WarpDistance)
         {
             transform.position = FlyerSummonPlugin.GetSpawnPosition(hero.transform.position);
             FlyerSummonPlugin.LogInfo($"Ally '{name}' warped back to Hornet (was {heroDistance:F0} away).");
@@ -201,7 +201,7 @@ internal sealed class AllyFlyer : MonoBehaviour
 
         // Distance takes priority: too far from Hornet means "come back", regardless of enemies.
         // Two thresholds (enter/exit) avoid flip-flopping around the boundary.
-        var followDistance = FlyerSummonPlugin.FollowDistance.Value;
+        var followDistance = FlyerSummonPlugin.FollowDistance;
         if (hero == null)
         {
             _followHero = false;
@@ -217,7 +217,7 @@ internal sealed class AllyFlyer : MonoBehaviour
         if (!_followHero)
         {
             var origin = hero != null ? (Vector2)hero.transform.position : (Vector2)transform.position;
-            enemy = FindNearestEnemy(origin, FlyerSummonPlugin.EnemySearchRadius.Value, gameObject);
+            enemy = FindNearestEnemy(origin, FlyerSummonPlugin.EnemySearchRadius, gameObject);
         }
 
         if (enemy != _currentEnemy)
@@ -360,7 +360,7 @@ internal sealed class AllyFlyer : MonoBehaviour
 
     private void RollOrbit()
     {
-        var radius = FlyerSummonPlugin.OrbitRadius.Value;
+        var radius = FlyerSummonPlugin.OrbitRadius;
         if (radius <= 0f)
         {
             _orbitOffset = Vector2.zero;
@@ -384,7 +384,7 @@ internal sealed class AllyFlyer : MonoBehaviour
             if (state == "Attack Antic")
             {
                 // Roll a fresh, random aim point for this throw.
-                var spread = FlyerSummonPlugin.AimSpread.Value;
+                var spread = FlyerSummonPlugin.AimSpread;
                 _aimOffset = spread > 0f ? UnityEngine.Random.insideUnitCircle * spread : Vector2.zero;
             }
         }
@@ -541,7 +541,7 @@ internal sealed class AllyFlyer : MonoBehaviour
         // Hornet, so widen them to the configured search radius to make the companion proactive.
         var radius = Mathf.Max(
             Mathf.Max(bounds.extents.x, bounds.extents.y),
-            FlyerSummonPlugin.EnemySearchRadius.Value);
+            FlyerSummonPlugin.EnemySearchRadius);
         var circleHits = Physics2D.OverlapCircleAll(bounds.center, radius, EnemyLayerMask);
         foreach (var hit in circleHits)
         {

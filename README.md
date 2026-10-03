@@ -36,7 +36,7 @@
 - **F9** 召唤出的是**友军**：自动索敌并投掷炸弹攻击敌人，不会伤害大黄蜂；
   默认免疫大黄蜂的伤害（可用 `Ally/AllyInvincible` 关闭）。
 - 友军的炸弹有正常抛物线，**会穿过大黄蜂**（不会因碰到大黄蜂而爆炸），碰到敌人立即爆炸，落到地面/障碍后延迟爆炸。
-- 附近没有敌人时，如果离大黄蜂太远（`Ally/FollowDistance`），友军会主动飞回大黄蜂身边；距离判定优先于索敌。
+- 附近没有敌人时，如果离大黄蜂太远，友军会主动飞回大黄蜂身边；距离判定优先于索敌。
 - 默认跨场景保留（`Ally/PersistAcrossScenes`），过场景/拉开过远时会自动传送回大黄蜂身边；回到主菜单一段时间后会自动清除，避免带进别的存档。
 - 召唤数量受 `Ally/MaxCount` 限制（默认 3），按 `F10` 可清除全部友军。
 - 所有配置均支持热更新：通过 ConfigurationManager 修改立即生效；直接改 `.cfg` 文件也会每约 1 秒自动重载。
@@ -53,33 +53,21 @@
 | `General/Hotkey` | `F8` | 敌对飞工召唤热键，填写 `KeyCode` 名称。装有 ConfigurationManager 时可点击按钮改键。 |
 | `General/FriendlyHotkey` | `F9` | 友军飞工召唤热键。 |
 | `General/ClearAlliesHotkey` | `F10` | 清除所有友军飞工的热键。 |
-| `General/SceneAddress` | `Scenes/Dock_02` | 用作“预制体仓库”的深坞场景 Addressables 地址。若加载失败，可尝试 `scenes/dock_02`。 |
-| `General/EnemyObjectName` | `Dock Bomber` | 从仓库场景中克隆的敌人物体名。 |
-| `Summon/SpawnOffsetX` | `3` | 相对大黄蜂的水平生成偏移。 |
-| `Summon/SpawnOffsetY` | `1.5` | 相对大黄蜂的垂直生成偏移。 |
-| `Summon/SpawnRadius` | `3` | 在生成点周围随机散布的半径，避免多只飞工叠在一起；`0` 关闭。 |
-| `Ally/EnemySearchRadius` | `25` | 友军索敌半径。 |
-| `Ally/FollowDistance` | `12` | 友军远离大黄蜂超过该值就优先回飞。 |
-| `Ally/WarpDistance` | `50` | 硬性传送兜底距离（过远/过场景时直接瞬移回大黄蜂）。 |
-| `Ally/AimSpread` | `1` | 炸弹落点在敌人周围的随机散布半径；`0` 为正中瞄准。 |
-| `Ally/OrbitRadius` | `3.5` | 每只飞工在敌人周围**随机方位**占位、从不同方向投弹；`0` 关闭。 |
+| `Ally/AllyInvincible` | `true` | 友军是否免疫大黄蜂造成的一切伤害（含钉子、工具、技能、爆炸）。 |
 | `Ally/MaxCount` | `3` | 同时存在的友军上限；超出时召唤仍生效，但会销毁最早生成的那只。 |
+| `Ally/BodyScale` | `1` | 友军**本体视觉大小**（`0.2~2`，同时缩放碰撞箱与警戒范围）。 |
+| `Ally/BombDamage` | `15` | 友军炸弹爆炸对敌人的伤害（原版为 300）。 |
+| `Ally/BombEffectScale` | `1` | 友军爆炸**视觉大小**（`0~1`，伤害范围保持不变，`0` 为不可见）。 |
+| `Ally/BombVolume` | `0.1` | 友军炸弹音量倍率（飞行音 + 爆炸音），`0` 为静音。 |
+| `Ally/ThrowSound` | `false` | 友军投弹是否播放原版投掷音效/语音（默认静音）。 |
+| `Ally/AwardJournalKill` | `false` | 友军击杀是否计入猎人日志。 |
+| `Ally/PersistAcrossScenes` | `true` | 友军是否跨场景保留，并在新场景自动回到大黄蜂身边。 |
 | `Ally/AutoDespawnAfterThrows` | `false` | 是否开启“投弹 N 次后自动消失”。关闭时飞工一直存在，只能用 F10 清除。 |
 | `Ally/AutoDespawnThrowCount` | `5` | 开启自动消失时，投弹多少次后消失。 |
 | `Tool/ReplaceCogworkFlier` | `true` | 是否把「齿轮蜂」工具替换为友军燧焰飞工（投出的飞工 + 图标）。 |
-| `Ally/BombDamage` | `15` | 友军炸弹爆炸对敌人的伤害（原版为 300）。 |
-| `Ally/BombVolume` | `0.1` | 友军炸弹音量倍率（飞行音 + 爆炸音），`0` 为静音；只影响友军。 |
-| `Ally/BombEffectScale` | `1` | 友军爆炸**视觉大小**（`0~1`，伤害范围保持不变，`0` 为不可见）。 |
-
-> 友军炸弹的**火焰浓度（0.2）、烟雾浓度（0.01）**以及全屏闪光/暗角、相机震动/振动、大粒子等已**写死**，不提供配置。
-| `Ally/ThrowSound` | `false` | 友军投弹是否播放原版投掷音效/语音（默认静音）。 |
-| `Ally/BodyScale` | `1` | 友军**本体视觉大小**（`0.2~2`，同时缩放碰撞箱与警戒范围）。 |
-
-> 友军炸弹的**全屏闪光/暗角、相机震动/振动、大粒子**一律关闭（已写死，不提供配置），保证视野清晰。
-| `Ally/AwardJournalKill` | `false` | 友军击杀是否计入猎人日志。 |
-| `Ally/AllyInvincible` | `true` | 友军是否免疫大黄蜂造成的一切伤害（含钉子、工具、技能、爆炸）。 |
-| `Ally/PersistAcrossScenes` | `true` | 友军是否跨场景保留，并在新场景自动回到大黄蜂身边。 |
 | `General/DebugLogging` | `false` | 输出额外调试日志到 BepInEx 控制台/日志。 |
+
+> 以下项目已**写死**（经调试确定），不提供配置：场景地址（`Scenes/Dock_02`）、敌人物体名（`Dock Bomber`）、生成偏移/半径（`3` / `1.5` / `3`）、索敌半径（`25`）、回飞距离（`12`）、瞬移兜底距离（`25`）、瞄准散布（`1`）、环绕半径（`6`）；以及友军炸弹的火焰浓度（`0.2`）、烟雾浓度（`0.01`）、全屏闪光/暗角、相机震动/振动、大粒子。
 
 ---
 
@@ -128,8 +116,7 @@
 ## 注意事项
 
 - 首次召唤会临时加载并卸载一个深坞场景，属于正常现象；日志中会显示相关记录。
-- 如果日志提示 `was not found in library scene`，请检查 `SceneAddress` 与
-  `EnemyObjectName` 是否与你的游戏版本一致。
+- 如果日志提示 `was not found in library scene`，说明游戏版本与模组内置的场景地址/敌人物体名不一致，需要重新适配。
 - 模组只读取并克隆资源，不改动存档数据。
 
 ---

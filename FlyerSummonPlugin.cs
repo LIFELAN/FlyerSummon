@@ -13,21 +13,23 @@ public partial class FlyerSummonPlugin : BaseUnityPlugin
 {
     internal static FlyerSummonPlugin Instance { get; private set; } = null!;
 
+    // Fixed, tested values (not configurable).
+    internal const string SceneAddress = "Scenes/Dock_02";
+    internal const string EnemyObjectName = "Dock Bomber";
+    internal const float SpawnOffsetX = 3f;
+    internal const float SpawnOffsetY = 1.5f;
+    internal const float SpawnRadius = 3f;
+    internal const float EnemySearchRadius = 25f;
+    internal const float FollowDistance = 12f;
+    internal const float WarpDistance = 25f;
+    internal const float AimSpread = 1f;
+    internal const float OrbitRadius = 6f;
+
     internal static ConfigEntry<KeyCode> Hotkey = null!;
     internal static ConfigEntry<KeyCode> FriendlyHotkey = null!;
-    internal static ConfigEntry<string> SceneAddress = null!;
-    internal static ConfigEntry<string> EnemyObjectName = null!;
-    internal static ConfigEntry<float> SpawnOffsetX = null!;
-    internal static ConfigEntry<float> SpawnOffsetY = null!;
-    internal static ConfigEntry<float> SpawnRadius = null!;
     internal static ConfigEntry<bool> DebugLogging = null!;
 
     // Friendly companion settings.
-    internal static ConfigEntry<float> EnemySearchRadius = null!;
-    internal static ConfigEntry<float> FollowDistance = null!;
-    internal static ConfigEntry<float> WarpDistance = null!;
-    internal static ConfigEntry<float> AimSpread = null!;
-    internal static ConfigEntry<float> OrbitRadius = null!;
     internal static ConfigEntry<int> MaxCount = null!;
     internal static ConfigEntry<int> BombDamage = null!;
     internal static ConfigEntry<bool> AwardJournalKill = null!;
@@ -59,12 +61,6 @@ public partial class FlyerSummonPlugin : BaseUnityPlugin
                 null,
                 new ConfigurationManagerAttributes { CustomHotkeyDrawer = DrawHotkeyField }));
 
-        SceneAddress = Config.Bind(
-            "General",
-            "SceneAddress",
-            "Scenes/Dock_02",
-            "Addressables address of the Deep Docks scene used as a prefab library. It is loaded once, stripped of its GameObjects, and its dependency bundles are kept loaded so the summoned enemy keeps its bomb, animations and sprite atlas.");
-
         FriendlyHotkey = Config.Bind(
             "General",
             "FriendlyHotkey",
@@ -74,38 +70,11 @@ public partial class FlyerSummonPlugin : BaseUnityPlugin
                 null,
                 new ConfigurationManagerAttributes { CustomHotkeyDrawer = DrawHotkeyField }));
 
-        EnemyObjectName = Config.Bind(
-            "General",
-            "EnemyObjectName",
-            "Dock Bomber",
-            "Name of the enemy GameObject to clone out of the library scene.");
-
-        SpawnOffsetX = Config.Bind("Summon", "SpawnOffsetX", 3f, "Horizontal spawn offset from Hornet.");
-        SpawnOffsetY = Config.Bind("Summon", "SpawnOffsetY", 1.5f, "Vertical spawn offset from Hornet.");
-
-        SpawnRadius = Config.Bind(
-            "Summon",
-            "SpawnRadius",
-            3f,
-            new ConfigDescription(
-                "Random horizontal/vertical jitter (in units) added around the spawn point so multiple summons do not stack. 0 disables it.",
-                new AcceptableValueRange<float>(0f, 15f),
-                new ConfigurationManagerAttributes { ShowRangeAsPercent = false }));
-
         DebugLogging = Config.Bind(
             "General",
             "DebugLogging",
             false,
             "Log extra debugging information to the BepInEx console/log.");
-
-        EnemySearchRadius = Config.Bind(
-            "Ally",
-            "EnemySearchRadius",
-            25f,
-            new ConfigDescription(
-                "How far a friendly Flintflame Flyer looks for a new enemy to attack.",
-                new AcceptableValueRange<float>(5f, 80f),
-                new ConfigurationManagerAttributes { ShowRangeAsPercent = false }));
 
         BombDamage = Config.Bind(
             "Ally",
@@ -160,42 +129,6 @@ public partial class FlyerSummonPlugin : BaseUnityPlugin
             "AllyInvincible",
             true,
             "If true, friendly Flyers are immune to all damage coming from Hornet (nail, tools, skills, explosions).");
-
-        FollowDistance = Config.Bind(
-            "Ally",
-            "FollowDistance",
-            12f,
-            new ConfigDescription(
-                "Distance from Hornet at which a friendly Flyer stops fighting and flies back to her. Distance takes priority over attacking.",
-                new AcceptableValueRange<float>(2f, 40f),
-                new ConfigurationManagerAttributes { ShowRangeAsPercent = false }));
-
-        WarpDistance = Config.Bind(
-            "Ally",
-            "WarpDistance",
-            50f,
-            new ConfigDescription(
-                "Hard fallback: if a friendly Flyer is somehow farther than this from Hornet, it teleports back instead of flying (also used after scene transitions).",
-                new AcceptableValueRange<float>(15f, 200f),
-                new ConfigurationManagerAttributes { ShowRangeAsPercent = false }));
-
-        AimSpread = Config.Bind(
-            "Ally",
-            "AimSpread",
-            1f,
-            new ConfigDescription(
-                "Random radius (in units) around an enemy that a friendly Flyer aims its bombs at. 0 aims at the exact centre.",
-                new AcceptableValueRange<float>(0f, 10f),
-                new ConfigurationManagerAttributes { ShowRangeAsPercent = false }));
-
-        OrbitRadius = Config.Bind(
-            "Ally",
-            "OrbitRadius",
-            3.5f,
-            new ConfigDescription(
-                "Each friendly Flyer picks a random spot on a circle of this radius around its target to hover and throw bombs from, so several flyers attack from different directions. 0 disables it.",
-                new AcceptableValueRange<float>(0f, 12f),
-                new ConfigurationManagerAttributes { ShowRangeAsPercent = false }));
 
         MaxCount = Config.Bind(
             "Ally",
@@ -342,11 +275,11 @@ public partial class FlyerSummonPlugin : BaseUnityPlugin
     internal static Vector3 GetSpawnPosition(Vector3 heroPos)
     {
         var pos = new Vector3(
-            heroPos.x + SpawnOffsetX.Value,
-            heroPos.y + SpawnOffsetY.Value,
+            heroPos.x + SpawnOffsetX,
+            heroPos.y + SpawnOffsetY,
             heroPos.z);
 
-        var radius = SpawnRadius.Value;
+        var radius = SpawnRadius;
         if (radius > 0f)
         {
             var jitter = UnityEngine.Random.insideUnitCircle * radius;

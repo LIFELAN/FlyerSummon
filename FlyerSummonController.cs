@@ -161,7 +161,7 @@ internal sealed class FlyerSummonController : MonoBehaviour
     private IEnumerator LoadLibrary()
     {
         _loading = true;
-        var address = FlyerSummonPlugin.SceneAddress.Value;
+        var address = FlyerSummonPlugin.SceneAddress;
         FlyerSummonPlugin.LogInfo($"Loading library scene '{address}'…");
 
         // activateOnLoad: true is required: a scene loaded with allowSceneActivation = false cannot
@@ -192,7 +192,7 @@ internal sealed class FlyerSummonController : MonoBehaviour
             yield break;
         }
 
-        var name = FlyerSummonPlugin.EnemyObjectName.Value;
+        var name = FlyerSummonPlugin.EnemyObjectName;
         GameObject? source = null;
 
         try
@@ -366,7 +366,7 @@ internal sealed class FlyerSummonController : MonoBehaviour
 
     private bool TryGetActiveSceneEnemy([NotNullWhen(true)] out GameObject? source)
     {
-        var name = FlyerSummonPlugin.EnemyObjectName.Value;
+        var name = FlyerSummonPlugin.EnemyObjectName;
         source = FindObjectByName(SceneManager.GetActiveScene(), name);
         return source != null;
     }
@@ -437,7 +437,7 @@ internal sealed class FlyerSummonController : MonoBehaviour
         var pos = FlyerSummonPlugin.GetSpawnPosition(hero.transform.position);
 
         var clone = Instantiate(_template, pos, Quaternion.identity);
-        clone.name = FlyerSummonPlugin.EnemyObjectName.Value + (friendly ? " (Ally)" : " (Summoned)");
+        clone.name = FlyerSummonPlugin.EnemyObjectName + (friendly ? " (Ally)" : " (Summoned)");
 
         if (friendly && FlyerSummonPlugin.PersistAcrossScenes.Value)
         {
