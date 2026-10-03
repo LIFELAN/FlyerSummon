@@ -20,7 +20,6 @@
     <PathMap Condition="'$(Configuration)' == 'Release'">$(MSBuildProjectDirectory)=/</PathMap>
 
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/lifelan/FlyerSummon</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
@@ -44,9 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Remove="thunderstore/temp;thunderstore/dist" />
     <None Include="README.md" Pack="True" PackagePath="README.md" />
-    <None Include="thunderstore/icon.png" Pack="True" PackagePath="icon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,37 +51,17 @@
     <EmbeddedResource Include="Assets/cogworkflyer_icon.png" LogicalName="FlyerSummon.cogworkflyer_icon.png" />
   </ItemGroup>
 
-  <Target Name="CopyAndPackageMod" AfterTargets="PostBuildEvent">
+  <Target Name="CopyToPlugins" AfterTargets="PostBuildEvent">
     <ItemGroup>
-      <Binaries Include="$(TargetPath)" LocalDir="/" PackDir="/" />
-      <Binaries Include="$(TargetDir)/$(TargetName).pdb" LocalDir="/" PackDir="/" />
+      <Binaries Include="$(TargetPath)" />
+      <Binaries Include="$(TargetDir)/$(TargetName).pdb" />
     </ItemGroup>
-    <PropertyGroup>
-      <ThunderstoreDir>$(ProjectDir)/thunderstore</ThunderstoreDir>
-    </PropertyGroup>
 
-    <!-- Local install -->
+    <!-- Local install: copy the DLL/PDB into the BepInEx plugins folder. -->
     <Copy
       SourceFiles="@(Binaries)"
-      DestinationFolder="$(SilksongPluginsFolder)/lifelan-$(AssemblyTitle)/%(Binaries.LocalDir)"
+      DestinationFolder="$(SilksongPluginsFolder)/lifelan-$(AssemblyTitle)/"
       Condition="'$(SilksongPluginsFolder)' != '' And Exists('$(SilksongPluginsFolder)')"
-    />
-
-    <!-- Thunderstore packaging -->
-    <RemoveDir Directories="$(ThunderstoreDir)/temp;$(ThunderstoreDir)/dist" />
-    <MakeDir Directories="$(ThunderstoreDir)/temp" />
-    <Copy
-      SourceFiles="@(Binaries)"
-      DestinationFolder="$(ThunderstoreDir)/temp/%(Binaries.PackDir)"
-    />
-    <PropertyGroup>
-      <ThunderstorePkgVersion>$([System.String]::Copy($(Version)).Split('-')[0])</ThunderstorePkgVersion>
-    </PropertyGroup>
-    <Exec Command="dotnet tool restore" />
-    <Exec
-      Command="dotnet tcli build --config-path &quot;$(ThunderstoreDir)/thunderstore.toml&quot; --package-name &quot;$(AssemblyTitle)&quot; --package-version $(ThunderstorePkgVersion)"
-      StandardOutputImportance="High"
-      StandardErrorImportance="High"
     />
   </Target>
 </Project>

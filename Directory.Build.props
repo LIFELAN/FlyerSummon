@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <!-- These properties will control the generated plugin info and Thunderstore manifest. -->
+    <!-- These properties control the generated plugin info. -->
     <!--
     This is the name of your plugin as it would appear in-game and in a mod installer.
     Allowed characters are A-Z, a-z, 0-9 and _

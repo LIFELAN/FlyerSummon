@@ -140,9 +140,7 @@
 dotnet build -c Release
 ```
 
-构建完成后会：
-
-- 将 `FlyerSummon.dll` 复制到 `BepInEx/plugins/lifelan-FlyerSummon/`；
-- 在 `thunderstore/dist/` 生成 Thunderstore 安装包。
+构建完成后会将 `FlyerSummon.dll` 复制到 `BepInEx/plugins/lifelan-FlyerSummon/`。
+自定义工具图标位于 `Assets/cogworkflyer_icon.png`，会嵌入 DLL。
 
 游戏路径在 `SilksongPath.props` 中配置。

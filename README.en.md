@@ -192,6 +192,5 @@ when you return to the main menu.
 dotnet build -c Release
 ```
 
-The build copies `FlyerSummon.dll` into `BepInEx/plugins/lifelan-FlyerSummon/` and produces a
-Thunderstore package in `thunderstore/dist/`. The custom tool icon lives at
-`Assets/cogworkflyer_icon.png` and is embedded into the DLL.
+The build copies `FlyerSummon.dll` into `BepInEx/plugins/lifelan-FlyerSummon/`. The custom tool
+icon lives at `Assets/cogworkflyer_icon.png` and is embedded into the DLL.
